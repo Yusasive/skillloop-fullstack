@@ -124,4 +124,4 @@ MIT
 
 ---
 
-Built by Yusasive
+Built by Yusasive as part of the SkillLoop Innovation Project at University of Ilorin.
