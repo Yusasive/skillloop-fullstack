@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 import {
   getSessionById,
   updateSession,
@@ -80,7 +81,7 @@ export async function POST(
 
     // Create notification for learner
     await createNotification({
-      id: require("uuid").v4(),
+      id: uuidv4(),
       userId: learner.id,
       type: "session_rejected",
       title: "Session Request Declined",
