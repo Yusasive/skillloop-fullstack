@@ -75,6 +75,7 @@ export default function SessionDetailPage({ params }: SessionDetailPageProps) {
             data.session.tutorAddress,
             data.session.learnerAddress,
           ].filter(Boolean);
+          
           const userPromises = userAddresses.map(async (address) => {
             try {
               const userRes = await fetch(`/api/users/${address}`);
@@ -121,7 +122,9 @@ export default function SessionDetailPage({ params }: SessionDetailPageProps) {
       }
     };
 
-    fetchSessionDetails();
+    if (params.id) {
+      fetchSessionDetails();
+    }
   }, [params.id, router, toast]);
 
   const isTutor = session?.tutorAddress === account;
@@ -654,7 +657,7 @@ export default function SessionDetailPage({ params }: SessionDetailPageProps) {
                       <div className="space-y-3">
                         {session.learningObjectives.map((objective, index) => {
                           const isAchieved =
-                            session.progressTracking?.objectivesAchieved.includes(
+                            session.progressTracking?.objectivesAchieved?.includes(
                               objective
                             );
 

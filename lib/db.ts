@@ -61,7 +61,10 @@ async function connectToDatabase() {
       console.log("Connected to MongoDB successfully");
     } catch (error) {
       console.error("Failed to connect to MongoDB:", error);
-      throw error;
+      // Don't throw error during build time to prevent build failures
+      if (process.env.NODE_ENV !== 'production') {
+        throw error;
+      }
     }
   }
   return {
@@ -83,6 +86,7 @@ export async function getUsers(
 ): Promise<User[]> {
   try {
     const { users } = await connectToDatabase();
+    if (!users) return [];
     return users.find(filter).skip(skip).limit(limit).toArray();
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -93,6 +97,7 @@ export async function getUsers(
 export async function getUserByAddress(address: string): Promise<User | null> {
   try {
     const { users } = await connectToDatabase();
+    if (!users) return null;
     return users.findOne({ address: address.toLowerCase() });
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -103,6 +108,8 @@ export async function getUserByAddress(address: string): Promise<User | null> {
 export async function createUser(user: Partial<User>): Promise<User> {
   try {
     const { users } = await connectToDatabase();
+    if (!users) throw new Error("Database connection failed");
+    
     const newUser = {
       ...user,
       address: user.address?.toLowerCase(),
@@ -130,6 +137,7 @@ export async function updateUser(
 ): Promise<User | null> {
   try {
     const { users } = await connectToDatabase();
+    if (!users) return null;
 
     const updateDoc = {
       $set: {
@@ -158,6 +166,7 @@ export async function updateUserTokenBalance(
 ): Promise<User | null> {
   try {
     const { users } = await connectToDatabase();
+    if (!users) return null;
 
     const updateDoc =
       operation === "add"
@@ -183,6 +192,7 @@ export async function updateUserRating(
 ): Promise<User | null> {
   try {
     const { users } = await connectToDatabase();
+    if (!users) return null;
 
     // Get current user data
     const user = await users.findOne({ address: address.toLowerCase() });
@@ -222,6 +232,7 @@ export async function getSessions(
 ): Promise<Session[]> {
   try {
     const { sessions } = await connectToDatabase();
+    if (!sessions) return [];
     return sessions
       .find(filter)
       .sort({ createdAt: -1 })
@@ -237,6 +248,7 @@ export async function getSessions(
 export async function getSessionById(id: string): Promise<Session | null> {
   try {
     const { sessions } = await connectToDatabase();
+    if (!sessions) return null;
     return sessions.findOne({ id });
   } catch (error) {
     console.error("Error fetching session:", error);
@@ -249,6 +261,8 @@ export async function createSession(
 ): Promise<Session> {
   try {
     const { sessions } = await connectToDatabase();
+    if (!sessions) throw new Error("Database connection failed");
+    
     const newSession = {
       ...session,
       status: session.status || "requested",
@@ -270,6 +284,7 @@ export async function updateSession(
 ): Promise<Session | null> {
   try {
     const { sessions } = await connectToDatabase();
+    if (!sessions) return null;
 
     const updateDoc = {
       $set: {
@@ -296,6 +311,7 @@ export async function getCertificates(
 ): Promise<Certificate[]> {
   try {
     const { certificates } = await connectToDatabase();
+    if (!certificates) return [];
     return certificates
       .find(filter)
       .sort({ createdAt: -1 })
@@ -313,6 +329,8 @@ export async function createCertificate(
 ): Promise<Certificate> {
   try {
     const { certificates } = await connectToDatabase();
+    if (!certificates) throw new Error("Database connection failed");
+    
     const newCertificate = {
       ...certificate,
       status: certificate.status || "pending",
@@ -333,6 +351,7 @@ export async function updateCertificate(
 ): Promise<Certificate | null> {
   try {
     const { certificates } = await connectToDatabase();
+    if (!certificates) return null;
 
     const result = await certificates.findOneAndUpdate(
       { id },
@@ -354,6 +373,7 @@ export async function getReviews(
 ): Promise<Review[]> {
   try {
     const { reviews } = await connectToDatabase();
+    if (!reviews) return [];
     return reviews
       .find(filter)
       .sort({ createdAt: -1 })
@@ -369,6 +389,8 @@ export async function getReviews(
 export async function createReview(review: Partial<Review>): Promise<Review> {
   try {
     const { reviews } = await connectToDatabase();
+    if (!reviews) throw new Error("Database connection failed");
+    
     const newReview = {
       ...review,
       createdAt: new Date(),
@@ -387,6 +409,8 @@ export async function createTokenTransaction(
 ): Promise<TokenTransaction> {
   try {
     const { transactions } = await connectToDatabase();
+    if (!transactions) throw new Error("Database connection failed");
+    
     const newTransaction = {
       ...transaction,
       status: transaction.status || "pending",
@@ -407,6 +431,7 @@ export async function updateTokenTransaction(
 ): Promise<TokenTransaction | null> {
   try {
     const { transactions } = await connectToDatabase();
+    if (!transactions) return null;
 
     const result = await transactions.findOneAndUpdate(
       { sessionId },
@@ -428,6 +453,7 @@ export async function getNotifications(
 ): Promise<Notification[]> {
   try {
     const { notifications } = await connectToDatabase();
+    if (!notifications) return [];
     return notifications
       .find(filter)
       .sort({ createdAt: -1 })
@@ -445,6 +471,8 @@ export async function createNotification(
 ): Promise<Notification> {
   try {
     const { notifications } = await connectToDatabase();
+    if (!notifications) throw new Error("Database connection failed");
+    
     const newNotification = {
       ...notification,
       read: false,
@@ -464,6 +492,7 @@ export async function markNotificationAsRead(
 ): Promise<Notification | null> {
   try {
     const { notifications } = await connectToDatabase();
+    if (!notifications) return null;
 
     const result = await notifications.findOneAndUpdate(
       { id },
@@ -486,6 +515,7 @@ export async function getLearningRequests(
 ): Promise<LearningRequest[]> {
   try {
     const { learningRequests } = await connectToDatabase();
+    if (!learningRequests) return [];
     return learningRequests
       .find(filter)
       .sort({ createdAt: -1 })
@@ -503,6 +533,7 @@ export async function getLearningRequestById(
 ): Promise<LearningRequest | null> {
   try {
     const { learningRequests } = await connectToDatabase();
+    if (!learningRequests) return null;
     return learningRequests.findOne({ id });
   } catch (error) {
     console.error("Error fetching learning request:", error);
@@ -515,6 +546,8 @@ export async function createLearningRequest(
 ): Promise<LearningRequest> {
   try {
     const { learningRequests } = await connectToDatabase();
+    if (!learningRequests) throw new Error("Database connection failed");
+    
     const newLearningRequest = {
       ...learningRequest,
       status: learningRequest.status || "open",
@@ -537,6 +570,7 @@ export async function addBidToLearningRequest(
 ): Promise<LearningRequest | null> {
   try {
     const { learningRequests } = await connectToDatabase();
+    if (!learningRequests) return null;
 
     const result = await learningRequests.findOneAndUpdate(
       { id: learningRequestId },
@@ -561,6 +595,7 @@ export async function updateBidStatus(
 ): Promise<LearningRequest | null> {
   try {
     const { learningRequests } = await connectToDatabase();
+    if (!learningRequests) return null;
 
     const result = await learningRequests.findOneAndUpdate(
       { id: learningRequestId, "bids.id": bidId },
@@ -588,6 +623,7 @@ export async function updateLearningRequestStatus(
 ): Promise<LearningRequest | null> {
   try {
     const { learningRequests } = await connectToDatabase();
+    if (!learningRequests) return null;
 
     const updateDoc: any = {
       $set: {
