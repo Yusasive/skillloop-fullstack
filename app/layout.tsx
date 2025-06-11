@@ -1,40 +1,42 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Web3Provider } from "@/providers/WagmiProvider";
-import Navbar from "@/components/Navbar";
-import { Toaster } from "react-hot-toast";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import './globals.css';
+import type { Metadata } from 'next';
+import { ThemeProvider } from "@/components/theme-provider";
+import { Web3Provider } from "@/context/Web3Context";
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "SkillLoop",
-  description: "Peer-to-peer learning powered by web3p",
+  title: 'SkillLoop - Decentralized Learning Platform',
+  description: 'Connect with peers, schedule learning sessions, and earn on-chain certificates',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Web3Provider>
-          <Navbar />
-          <main className="flex">{children}</main>
-          <Toaster position="top-right" />
-        </Web3Provider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className="font-sans">
+        <ThemeProvider 
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Web3Provider>
+            <div className="flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+          </Web3Provider>
+        </ThemeProvider>
       </body>
     </html>
   );
