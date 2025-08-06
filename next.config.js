@@ -10,7 +10,7 @@ const nextConfig = {
   async generateStaticParams() {
     return [];
   },
-  // Configure build behavior
+  // Configure build behavior for better deployment
   output: 'standalone',
   // Ensure database connections work during build
   webpack: (config, { isServer }) => {
@@ -24,7 +24,41 @@ const nextConfig = {
         '@mongodb-js/zstd': 'commonjs @mongodb-js/zstd',
       });
     }
+    
+    // Ignore node-specific modules in client bundle
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+        stream: false,
+        url: false,
+        zlib: false,
+        http: false,
+        https: false,
+        assert: false,
+        os: false,
+        path: false,
+      };
+    }
+    
     return config;
+  },
+  // Optimize images
+  images: {
+    domains: ['images.pexels.com'],
+    unoptimized: false,
+  },
+  // Reduce bundle size
+  swcMinify: true,
+  // Improve build performance
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
   },
 };
 

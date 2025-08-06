@@ -13,16 +13,23 @@ import {
 // MongoDB connection string - should be stored in environment variables
 const uri =
   process.env.MONGODB_URI ||
-  "mongodb+srv://skillloop:skillloop123@cluster0.mongodb.net/skillloop?retryWrites=true&w=majority";
+  "";
 
+// Validate MongoDB URI
+if (!uri && process.env.NODE_ENV === 'production') {
+  throw new Error('MONGODB_URI environment variable is required in production');
+}
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
+const client = uri ? new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
   },
-});
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+}) : null;
 
 // Database collections
 let db: any;
@@ -36,6 +43,20 @@ let learningRequests: any;
 let isConnected = false;
 
 async function connectToDatabase() {
+  if (!client) {
+    console.warn('MongoDB client not initialized - using mock data for development');
+    return {
+      db: null,
+      users: null,
+      sessions: null,
+      certificates: null,
+      reviews: null,
+      transactions: null,
+      notifications: null,
+      learningRequests: null,
+    };
+  }
+
   if (!isConnected) {
     try {
       await client.connect();
@@ -61,10 +82,17 @@ async function connectToDatabase() {
       console.log("Connected to MongoDB successfully");
     } catch (error) {
       console.error("Failed to connect to MongoDB:", error);
-      // Don't throw error during build time to prevent build failures
-      if (process.env.NODE_ENV !== 'production') {
-        throw error;
-      }
+      // Return null collections to prevent crashes
+      return {
+        db: null,
+        users: null,
+        sessions: null,
+        certificates: null,
+        reviews: null,
+        transactions: null,
+        notifications: null,
+        learningRequests: null,
+      };
     }
   }
   return {
