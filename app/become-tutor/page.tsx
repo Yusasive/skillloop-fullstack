@@ -192,8 +192,8 @@ export default function BecomeTutorPage() {
                       Next Steps
                     </h4>
                     <p className="text-sm text-blue-700">
-                      After submitting this application, you'll be redirected to
-                      your profile where you can:
+                      After submitting this application, you&apos;ll be
+                      redirected to your profile where you can:
                     </p>
                     <ul className="text-sm text-blue-700 mt-2 space-y-1">
                       <li>• Add specific skills you want to teach</li>

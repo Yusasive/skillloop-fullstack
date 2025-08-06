@@ -679,11 +679,12 @@ export async function updateLearningRequestStatus(
 
 // Close MongoDB connection when the app is shutting down
 process.on("SIGINT", async () => {
-  if (isConnected) {
+  if (isConnected && client) {
     await client.close();
     isConnected = false;
   }
   process.exit(0);
 });
+
 
 export { connectToDatabase };

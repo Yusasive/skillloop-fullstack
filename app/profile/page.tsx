@@ -57,67 +57,6 @@ const ProfilePage = () => {
   const [skillHourlyRate, setSkillHourlyRate] = useState("");
   const [learningSkill, setLearningSkill] = useState("");
 
-  useEffect(() => {
-    if (!isConnected && !account) {
-      router.push("/");
-      return;
-    }
-
-    const initializeProfile = async () => {
-      try {
-        setLoading(true);
-
-        // Use context user if available, otherwise fetch
-        if (contextUser) {
-          setUser(contextUser);
-          setUsername(contextUser.username || "");
-          setBio(contextUser.bio || "");
-          setAvatar(contextUser.avatar || "");
-
-          // Auto-open editing for new users (no username)
-          if (!contextUser.username) {
-            setEditing(true);
-          }
-        } else if (account) {
-          // Fallback: fetch user data directly
-          const res = await fetch(`/api/users/${account}`);
-
-          if (res.status === 404) {
-            // This should be handled by the context now, but keep as fallback
-            await createUser();
-            setEditing(true);
-          } else if (res.ok) {
-            const data = await res.json();
-            setUser(data.user);
-            setUsername(data.user.username || "");
-            setBio(data.user.bio || "");
-            setAvatar(data.user.avatar || "");
-
-            if (!data.user.username) {
-              setEditing(true);
-            }
-          }
-        }
-
-        // Refresh token balance
-        await refreshTokenBalance();
-      } catch (error) {
-        console.error("Error initializing profile:", error);
-        if (toast) {
-          toast({
-            title: "Error",
-            description: "Failed to load your profile. Please try again.",
-            variant: "destructive",
-          });
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeProfile();
-  }, [account, isConnected, contextUser, router, toast, refreshTokenBalance]);
-
   const createUser = async () => {
     try {
       const res = await fetch("/api/users", {
@@ -155,6 +94,95 @@ const ProfilePage = () => {
       }
     }
   };
+  useEffect(() => {
+    if (!isConnected && !account) {
+      router.push("/");
+      return;
+    }
+
+    const createUser = async () => {
+      try {
+        const res = await fetch("/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ address: account }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+
+          if (toast) {
+            toast({
+              title: "Welcome to SkillLoop!",
+              description:
+                "Your profile has been created. Please complete your details.",
+            });
+          }
+        } else {
+          throw new Error("Failed to create user");
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        if (toast) {
+          toast({
+            title: "Error",
+            description: "Failed to create your profile. Please try again.",
+            variant: "destructive",
+          });
+        }
+      }
+    };
+
+    const initializeProfile = async () => {
+      try {
+        setLoading(true);
+
+        if (contextUser) {
+          setUser(contextUser);
+          setUsername(contextUser.username || "");
+          setBio(contextUser.bio || "");
+          setAvatar(contextUser.avatar || "");
+          if (!contextUser.username) {
+            setEditing(true);
+          }
+        } else if (account) {
+          const res = await fetch(`/api/users/${account}`);
+
+          if (res.status === 404) {
+            await createUser();
+            setEditing(true);
+          } else if (res.ok) {
+            const data = await res.json();
+            setUser(data.user);
+            setUsername(data.user.username || "");
+            setBio(data.user.bio || "");
+            setAvatar(data.user.avatar || "");
+            if (!data.user.username) {
+              setEditing(true);
+            }
+          }
+        }
+
+        await refreshTokenBalance();
+      } catch (error) {
+        console.error("Error initializing profile:", error);
+        if (toast) {
+          toast({
+            title: "Error",
+            description: "Failed to load your profile. Please try again.",
+            variant: "destructive",
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeProfile();
+  }, [account, isConnected, contextUser, router, toast, refreshTokenBalance]);
 
   const updateProfile = async () => {
     if (!account) return;
@@ -652,8 +680,8 @@ const ProfilePage = () => {
                   <CardHeader>
                     <CardTitle>Skills You Can Teach</CardTitle>
                     <CardDescription>
-                      Add skills you're willing to teach others (5-20 SKL per
-                      hour)
+                      Add skills you&apos;re willing to teach others (5-20 SKL
+                      per hour)
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -701,7 +729,7 @@ const ProfilePage = () => {
                       ) : (
                         <div className="text-center py-8 border rounded-lg border-dashed">
                           <p className="text-muted-foreground">
-                            You haven't added any teaching skills yet.
+                            You haven&apos;t added any teaching skills yet.
                           </p>
                         </div>
                       )}
@@ -814,7 +842,7 @@ const ProfilePage = () => {
                   <CardHeader>
                     <CardTitle>Skills You Want to Learn</CardTitle>
                     <CardDescription>
-                      Add skills you're interested in learning
+                      Add skills you&apos;re interested in learning
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -842,7 +870,7 @@ const ProfilePage = () => {
                       ) : (
                         <div className="text-center py-8 border rounded-lg border-dashed">
                           <p className="text-muted-foreground">
-                            You haven't added any learning interests yet.
+                            You haven&apos;t added any learning interests yet.
                           </p>
                         </div>
                       )}

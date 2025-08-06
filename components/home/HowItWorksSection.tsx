@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Wallet, 
   Calendar, 
@@ -11,6 +11,7 @@ import {
   CheckCircle, 
   UserCircle 
 } from 'lucide-react';
+import Image from "next/image";
 
 const steps = [
   {
@@ -151,7 +152,7 @@ const HowItWorksSection = () => {
                 className={`${activeTab === step.id ? 'block' : 'hidden'} rounded-xl border bg-card overflow-hidden`}
               >
                 <div className="aspect-video w-full overflow-hidden">
-                  <img 
+                  <Image 
                     src={step.image} 
                     alt={step.title} 
                     className="h-full w-full object-cover"

@@ -1,19 +1,25 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { MessageSquare, Mail, Github, ExternalLink } from "lucide-react";
 
 export default function SupportPage() {
   const [loading, setLoading] = useState(false);
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       // Submit support request
       setTimeout(() => {
@@ -25,17 +31,18 @@ export default function SupportPage() {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="container py-8 md:py-12">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Support Center</h1>
           <p className="text-muted-foreground">
-            Need help? We're here to assist you with any questions or issues.
+            Need help? We&apos;re here to assist you with any questions or
+            issues.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
@@ -49,34 +56,36 @@ export default function SupportPage() {
             </CardHeader>
             <CardContent>
               <Button className="w-full" asChild>
-                <a href="https://discord.gg/skillloop" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://discord.gg/yusasive"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Join Discord
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Mail className="h-5 w-5" />
                 Email Support
               </CardTitle>
-              <CardDescription>
-                Send us a detailed message
-              </CardDescription>
+              <CardDescription>Send us a detailed message</CardDescription>
             </CardHeader>
             <CardContent>
               <Button className="w-full" asChild>
-                <a href="mailto:support@skillloop.xyz">
+                <a href="mailto:yusufabdullahi2910@gmail.com">
                   Email Us
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -89,7 +98,11 @@ export default function SupportPage() {
             </CardHeader>
             <CardContent>
               <Button className="w-full" asChild>
-                <a href="https://github.com/skillloop/issues" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://github.com/yusasive/skiilloop-fullstack/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Open Issue
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
@@ -97,12 +110,13 @@ export default function SupportPage() {
             </CardContent>
           </Card>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Contact Form</CardTitle>
             <CardDescription>
-              Send us a message and we'll get back to you as soon as possible
+              Send us a message and we&apos;ll get back to you as soon as
+              possible
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -117,28 +131,28 @@ export default function SupportPage() {
                   <Input required type="email" placeholder="your@email.com" />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Subject</label>
                 <Input required placeholder="What's this about?" />
               </div>
-              
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Message</label>
-                <Textarea 
-                  required 
+                <Textarea
+                  required
                   placeholder="Describe your issue or question..."
                   rows={5}
                 />
               </div>
-              
+
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </CardContent>
         </Card>
-        
+
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Common Issues</h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -154,7 +168,7 @@ export default function SupportPage() {
                 </ul>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Session Issues</CardTitle>

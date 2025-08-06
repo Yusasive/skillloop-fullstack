@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useWeb3 } from "@/context/Web3Context";
 import { useToast } from "@/hooks/use-toast";
@@ -61,7 +61,7 @@ const Navbar = () => {
   };
 
   // Fetch notifications
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     if (!user?.id) return;
 
     try {
@@ -70,7 +70,6 @@ const Navbar = () => {
         const data = await res.json();
         setNotifications(data.notifications || []);
 
-        // Count unread notifications
         const unread = data.notifications.filter(
           (n: Notification) => !n.read
         ).length;
@@ -79,7 +78,7 @@ const Navbar = () => {
     } catch (error) {
       console.error("Error fetching notifications:", error);
     }
-  };
+  }, [user?.id]);
 
   // Mark notification as read
   const markAsRead = async (notificationId: string) => {
@@ -194,19 +193,19 @@ const Navbar = () => {
   useEffect(() => {
     if (isConnected && account) {
       refreshTokenBalance();
+      fetchNotifications(); // Also works here now
     }
-  }, [isConnected, account, refreshTokenBalance]);
+  }, [isConnected, account, refreshTokenBalance, fetchNotifications]);
 
   // Fetch notifications when user is available
   useEffect(() => {
     if (user?.id) {
       fetchNotifications();
 
-      // Set up polling for new notifications every 30 seconds
       const interval = setInterval(fetchNotifications, 30000);
       return () => clearInterval(interval);
     }
-  }, [user?.id]);
+  }, [user?.id, fetchNotifications]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

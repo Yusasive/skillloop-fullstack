@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Session, User, SessionProgress, Milestone } from "@/app/types";
+import { Session, User, Milestone } from "@/app/types";
 import { useWeb3 } from "@/context/Web3Context";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,18 +25,13 @@ import {
   Calendar,
   Clock,
   CheckCircle,
-  XCircle,
   Coins,
   User as UserIcon,
-  ExternalLink,
-  Award,
-  AlertTriangle,
   Play,
   Pause,
   Target,
   BookOpen,
   Video,
-  Users,
   Star,
   ArrowLeft,
 } from "lucide-react";
@@ -730,7 +725,9 @@ export default function SessionDetailPage({ params }: SessionDetailPageProps) {
                       <div className="space-y-4">
                         {session.sessionNotes ? (
                           <div className="p-4 bg-muted rounded-lg">
-                            <h4 className="font-medium mb-2">Tutor's Notes:</h4>
+                            <h4 className="font-medium mb-2">
+                              Tutor&apos;s Notes:
+                            </h4>
                             <p className="text-sm whitespace-pre-wrap">
                               {session.sessionNotes}
                             </p>

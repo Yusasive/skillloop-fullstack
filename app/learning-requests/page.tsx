@@ -933,7 +933,7 @@ export default function LearningRequestsPage() {
                     <div className="text-center py-12 border rounded-lg border-dashed">
                       <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                       <p className="text-muted-foreground mb-4">
-                        You haven't created any learning requests yet
+                        You haven&apos;t created any learning requests yet
                       </p>
                       <Button asChild>
                         <Link href="#create">Create Your First Request</Link>

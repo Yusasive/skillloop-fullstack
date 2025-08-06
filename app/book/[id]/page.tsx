@@ -210,7 +210,8 @@ export default function BookSessionPage({ params }: BookSessionPageProps) {
           <CardHeader>
             <CardTitle>Tutor Not Found</CardTitle>
             <CardDescription>
-              The tutor you're looking for doesn't exist or has been removed.
+              The tutor you&apos;re looking for doesn&apos;t exist or has been
+              removed.
             </CardDescription>
           </CardHeader>
           <CardContent>

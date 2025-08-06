@@ -47,12 +47,14 @@ export default function FAQPage() {
     <div className="container py-8 md:py-12">
       <div className="max-w-3xl mx-auto space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+          <h1 className="text-4xl font-bold mb-4">
+            Frequently Asked Questions
+          </h1>
           <p className="text-muted-foreground">
             Find answers to common questions about SkillLoop
           </p>
         </div>
-        
+
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -61,13 +63,13 @@ export default function FAQPage() {
             </AccordionItem>
           ))}
         </Accordion>
-        
+
         <div className="text-center pt-8">
           <p className="text-muted-foreground mb-4">
-            Still have questions? We're here to help!
+            Still have questions? We&apos;re here to help!
           </p>
-          <a 
-            href="mailto:support@skillloop.xyz"
+          <a
+            href="mailto:yusufabdullahi2910@gmail.com"
             className="text-primary hover:underline"
           >
             Contact Support

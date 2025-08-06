@@ -229,7 +229,7 @@ export default function CertificatesPage() {
               <div className="col-span-full text-center py-12 border rounded-lg border-dashed">
                 <Award className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground mb-4">
-                  You haven't earned any certificates yet
+                  You haven&apos;t earned any certificates yet
                 </p>
                 <Button asChild>
                   <a href="/tutors">Start Learning</a>
