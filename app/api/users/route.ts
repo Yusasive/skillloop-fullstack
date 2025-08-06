@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUsers, createUser, getUserByAddress } from '@/lib/db';
+import { validateRequest, createUserSchema } from '@/lib/validation';
+import { handleApiError } from '@/lib/error-handler';
 
 export async function GET(req: NextRequest) {
   try {
@@ -7,6 +9,14 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const skip = parseInt(searchParams.get('skip') || '0');
     const skill = searchParams.get('skill');
+    
+    // Validate pagination parameters
+    if (limit > 100) {
+      return NextResponse.json(
+        { error: 'Limit cannot exceed 100' },
+        { status: 400 }
+      );
+    }
     
     let filter = {};
     if (skill) {
@@ -17,18 +27,18 @@ export async function GET(req: NextRequest) {
     
     return NextResponse.json({ users });
   } catch (error: any) {
-    console.error('Error fetching users:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to fetch users' },
-      { status: 500 }
-    );
+    const { message, statusCode } = handleApiError(error);
+    return NextResponse.json({ error: message }, { status: statusCode });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { address, username, bio, avatar, skills, learning } = body;
+    
+    // Validate request body
+    const validatedData = validateRequest(createUserSchema, body);
+    const { address, username, bio, avatar, skills, learning } = validatedData;
     
     if (!address) {
       return NextResponse.json(
@@ -57,10 +67,7 @@ export async function POST(req: NextRequest) {
     
     return NextResponse.json({ user: newUser }, { status: 201 });
   } catch (error: any) {
-    console.error('Error creating user:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to create user' },
-      { status: 500 }
-    );
+    const { message, statusCode } = handleApiError(error);
+    return NextResponse.json({ error: message }, { status: statusCode });
   }
 }

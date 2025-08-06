@@ -6,7 +6,11 @@
     "dev": "rimraf .next && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "test": "echo \"No tests specified\" && exit 0",
+    "analyze": "cross-env ANALYZE=true npm run build",
+    "clean": "rimraf .next out dist build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

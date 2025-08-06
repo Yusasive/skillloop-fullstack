@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+import { validateRequest, createSessionSchema } from "@/lib/validation";
+import { handleApiError } from "@/lib/error-handler";
 import {
   getSessions,
   createSession,
@@ -19,6 +21,13 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get("status");
     const userId = searchParams.get("userId");
 
+    // Validate pagination
+    if (limit > 100) {
+      return NextResponse.json(
+        { error: 'Limit cannot exceed 100' },
+        { status: 400 }
+      );
+    }
     let filter: any = {};
     if (tutorId) filter.tutorId = tutorId;
     if (learnerId) filter.learnerId = learnerId;
@@ -47,17 +56,17 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ sessions });
   } catch (error: any) {
-    console.error("Error fetching sessions:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to fetch sessions" },
-      { status: 500 }
-    );
+    const { message, statusCode } = handleApiError(error);
+    return NextResponse.json({ error: message }, { status: statusCode });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    
+    // Validate request body
+    const validatedData = validateRequest(createSessionSchema, body);
     const {
       tutorAddress,
       learnerAddress,
@@ -67,21 +76,8 @@ export async function POST(req: NextRequest) {
       duration,
       tokenAmount,
       description,
-    } = body;
+    } = validatedData;
 
-    if (
-      !tutorAddress ||
-      !learnerAddress ||
-      !skillName ||
-      !startTime ||
-      !endTime ||
-      !tokenAmount
-    ) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
 
     // Validate token amount is within acceptable range (5-20 SKL per hour)
     const hourlyRate = tokenAmount / (duration / 60);
@@ -92,6 +88,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate session timing
+    const sessionStart = new Date(startTime);
+    const sessionEnd = new Date(endTime);
+    const now = new Date();
+    
+    if (sessionStart <= now) {
+      return NextResponse.json(
+        { error: "Session start time must be in the future" },
+        { status: 400 }
+      );
+    }
+    
+    if (sessionEnd <= sessionStart) {
+      return NextResponse.json(
+        { error: "Session end time must be after start time" },
+        { status: 400 }
+      );
+    }
     // Validate tutor and learner exist and get their IDs
     const tutor = await getUserByAddress(tutorAddress);
     const learner = await getUserByAddress(learnerAddress);
@@ -103,6 +117,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Prevent self-booking
+    if (tutorAddress.toLowerCase() === learnerAddress.toLowerCase()) {
+      return NextResponse.json(
+        { error: "Cannot book a session with yourself" },
+        { status: 400 }
+      );
+    }
     // Check if learner has sufficient token balance
     if (learner.tokenBalance < tokenAmount) {
       return NextResponse.json(
@@ -136,8 +157,8 @@ export async function POST(req: NextRequest) {
       tutorAddress: tutorAddress, // Store addresses for easier lookup
       learnerAddress: learnerAddress,
       skillName,
-      startTime: new Date(startTime),
-      endTime: new Date(endTime),
+      startTime: sessionStart,
+      endTime: sessionEnd,
       duration: duration || 60,
       tokenAmount: tokenAmount,
       description: description || "",
@@ -174,10 +195,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error("Error creating session:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to create session" },
-      { status: 500 }
-    );
+    const { message, statusCode } = handleApiError(error);
+    return NextResponse.json({ error: message }, { status: statusCode });
   }
 }
