@@ -124,6 +124,8 @@ const HeroSection = () => {
                 src="https://images.pexels.com/photos/5935791/pexels-photo-5935791.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 alt="People learning together"
                 className="object-cover w-full h-full"
+                width={1260} 
+                height={750}  
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                 <div className="text-white space-y-2">

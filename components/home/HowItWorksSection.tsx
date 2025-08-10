@@ -100,32 +100,40 @@ const HowItWorksSection = () => {
   return (
     <section id="how-it-works\" className="py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
+        <motion.div
           className="text-center max-w-3xl mx-auto mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold mb-4 sm:text-4xl">How SkillLoop Works</h2>
+          <h2 className="text-3xl font-bold mb-4 sm:text-4xl">
+            How SkillLoop Works
+          </h2>
           <p className="text-muted-foreground">
-            Follow these simple steps to start learning, teaching, and earning on-chain certificates.
+            Follow these simple steps to start learning, teaching, and earning
+            on-chain certificates.
           </p>
         </motion.div>
-        
+
         <div className="mt-8 grid md:grid-cols-5 gap-8">
-          <motion.div 
+          <motion.div
             className="md:col-span-2"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Tabs value={activeTab} onValueChange={setActiveTab} orientation="vertical" className="w-full">
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              orientation="vertical"
+              className="w-full"
+            >
               <TabsList className="w-full md:w-auto flex md:flex-col h-auto gap-1 bg-transparent">
                 {steps.map((step) => (
-                  <TabsTrigger 
-                    key={step.id} 
+                  <TabsTrigger
+                    key={step.id}
                     value={step.id}
                     className="w-full flex items-center justify-start gap-2 data-[state=active]:bg-card"
                   >
@@ -138,8 +146,8 @@ const HowItWorksSection = () => {
               </TabsList>
             </Tabs>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             className="md:col-span-3"
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -147,15 +155,17 @@ const HowItWorksSection = () => {
             viewport={{ once: true }}
           >
             {steps.map((step) => (
-              <div 
-                key={step.id} 
-                className={`${activeTab === step.id ? 'block' : 'hidden'} rounded-xl border bg-card overflow-hidden`}
+              <div
+                key={step.id}
+                className={`${activeTab === step.id ? "block" : "hidden"} rounded-xl border bg-card overflow-hidden`}
               >
                 <div className="aspect-video w-full overflow-hidden">
-                  <Image 
-                    src={step.image} 
-                    alt={step.title} 
+                  <Image
+                    src={step.image}
+                    alt={step.title}
                     className="h-full w-full object-cover"
+                    width={1260}  
+                    height={750}  
                   />
                 </div>
                 <div className="p-6">
@@ -163,13 +173,18 @@ const HowItWorksSection = () => {
                     {step.icon}
                     {step.title}
                   </h3>
-                  <p className="text-muted-foreground mb-4">{step.description}</p>
-                  
+                  <p className="text-muted-foreground mb-4">
+                    {step.description}
+                  </p>
+
                   <div className="mt-4">
                     <h4 className="font-semibold mb-2 text-sm">Key Points:</h4>
                     <ul className="space-y-1">
                       {step.details.map((detail, index) => (
-                        <li key={index} className="text-sm flex items-start gap-2">
+                        <li
+                          key={index}
+                          className="text-sm flex items-start gap-2"
+                        >
                           <CheckCircle className="h-4 w-4 text-chart-1 shrink-0 mt-0.5" />
                           <span>{detail}</span>
                         </li>

@@ -34,7 +34,8 @@ const CTASection = () => {
             <Image
               src="https://images.pexels.com/photos/7103164/pexels-photo-7103164.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
               alt="People learning together"
-              fill
+              width={1260}  
+              height={750} 
               className="object-cover opacity-40"
             />
           </div>
