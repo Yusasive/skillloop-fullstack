@@ -1,31 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
   },
-  // Disable static optimization for dynamic routes that depend on database
-  async generateStaticParams() {
-    return [];
-  },
-  // Configure build behavior for better deployment
-  output: 'standalone',
-  // Ensure database connections work during build
+
+  output: "standalone",
+
   webpack: (config, { isServer }) => {
     if (isServer) {
-      // Ensure MongoDB driver works in serverless environment
       config.externals.push({
-        'mongodb-client-encryption': 'commonjs mongodb-client-encryption',
-        'aws4': 'commonjs aws4',
-        'snappy': 'commonjs snappy',
-        'kerberos': 'commonjs kerberos',
-        '@mongodb-js/zstd': 'commonjs @mongodb-js/zstd',
+        "mongodb-client-encryption": "commonjs mongodb-client-encryption",
+        aws4: "commonjs aws4",
+        snappy: "commonjs snappy",
+        kerberos: "commonjs kerberos",
+        "@mongodb-js/zstd": "commonjs @mongodb-js/zstd",
       });
     }
-    
-    // Ignore node-specific modules in client bundle
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -43,20 +34,21 @@ const nextConfig = {
         path: false,
       };
     }
-    
+
     return config;
   },
-  // Optimize images
+
   images: {
-    domains: ['images.pexels.com'],
+    domains: ["images.pexels.com"],
     unoptimized: false,
   },
-  // Reduce bundle size
+
   swcMinify: true,
-  // Improve build performance
+
   typescript: {
     ignoreBuildErrors: false,
   },
+
   eslint: {
     ignoreDuringBuilds: false,
   },

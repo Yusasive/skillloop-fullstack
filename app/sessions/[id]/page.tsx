@@ -725,7 +725,9 @@ export default function SessionDetailPage({ params }: SessionDetailPageProps) {
                       <div className="space-y-4">
                         {session.sessionNotes ? (
                           <div className="p-4 bg-muted rounded-lg">
-                            <h4 className="font-medium mb-2">Tutor's Notes:</h4>
+                            <h4 className="font-medium mb-2">
+                              Tutor&apos;s Notes:
+                            </h4>
                             <p className="text-sm whitespace-pre-wrap">
                               {session.sessionNotes}
                             </p>
