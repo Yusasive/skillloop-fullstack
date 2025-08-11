@@ -4,12 +4,12 @@ SkillLoop is a Web3-powered peer-to-peer learning platform that connects learner
 
 ## Features
 
-- 🔐 **Web3 Authentication**: Connect with MetaMask or other Web3 wallets
-- 👥 **Skill Profiles**: Create profiles showcasing teaching skills and learning interests
-- 📅 **Session Scheduling**: Book learning sessions with secure token escrow
-- 💰 **Smart Contract Escrow**: Automatically handle token transfers upon session completion
-- 🏆 **NFT Certificates**: Earn on-chain proof of completed learning sessions
-- ⭐ **Review System**: Build reputation through peer reviews and ratings
+-  **Web3 Authentication**: Connect with MetaMask or other Web3 wallets
+-  **Skill Profiles**: Create profiles showcasing teaching skills and learning interests
+-  **Session Scheduling**: Book learning sessions with secure token escrow
+-  **Smart Contract Escrow**: Automatically handle token transfers upon session completion
+-  **NFT Certificates**: Earn on-chain proof of completed learning sessions
+-  **Review System**: Build reputation through peer reviews and ratings
 
 ## Tech Stack
 
