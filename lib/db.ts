@@ -15,10 +15,6 @@ const uri =
   process.env.MONGODB_URI ||
   "";
 
-// Validate MongoDB URI
-if (!uri && process.env.NODE_ENV === 'production') {
-  throw new Error('MONGODB_URI environment variable is required in production');
-}
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = uri ? new MongoClient(uri, {
   serverApi: {
@@ -43,6 +39,24 @@ let learningRequests: any;
 let isConnected = false;
 
 async function connectToDatabase() {
+  // Validate MongoDB URI
+  if (!uri) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('MONGODB_URI environment variable is required in production');
+    }
+    console.warn('MongoDB client not initialized - using mock data for development');
+    return {
+      db: null,
+      users: null,
+      sessions: null,
+      certificates: null,
+      reviews: null,
+      transactions: null,
+      notifications: null,
+      learningRequests: null,
+    };
+  }
+
   if (!client) {
     console.warn('MongoDB client not initialized - using mock data for development');
     return {

@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 // Start session and initialize progress tracking
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: any
 ) {
   try {
     const sessionId = params.id;
@@ -262,7 +262,7 @@ export async function POST(
 // Get session progress
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: any
 ) {
   try {
     const sessionId = params.id;

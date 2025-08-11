@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Session, Review } from "@/app/types";
 import { useWeb3 } from "@/context/Web3Context";
@@ -25,10 +25,11 @@ import {
 import Link from "next/link";
 
 interface ProfileViewPageProps {
-  params: { address: string };
+  params: Promise<{ address: string }>;
 }
 
-export default function ProfileViewPage({ params }: ProfileViewPageProps) {
+export default function ProfileViewPage({ params: paramsProp }: ProfileViewPageProps) {
+  const params = use(paramsProp);
   const router = useRouter();
   const { account } = useWeb3();
   const { toast } = useToast();

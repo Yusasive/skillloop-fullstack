@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useWeb3 } from "@/context/Web3Context";
 import { useToast } from "@/hooks/use-toast";
@@ -20,10 +20,11 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Star, ArrowLeft, Coins } from "lucide-react";
 
 interface BookSessionPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function BookSessionPage({ params }: BookSessionPageProps) {
+export default function BookSessionPage({ params: paramsProp }: BookSessionPageProps) {
+  const params = use(paramsProp);
   const router = useRouter();
   const { account, isConnected, tokenBalance, refreshTokenBalance } = useWeb3();
   const { toast } = useToast();
