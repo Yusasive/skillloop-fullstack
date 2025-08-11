@@ -43,8 +43,6 @@ const nextConfig = {
     unoptimized: false,
   },
 
-  swcMinify: true,
-
   typescript: {
     ignoreBuildErrors: false,
   },

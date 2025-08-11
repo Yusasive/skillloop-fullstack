@@ -13,7 +13,7 @@ import {
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string; bidId: string } }
+  { params }: any
 ) {
   try {
     const { id: learningRequestId, bidId } = params;
