@@ -3,7 +3,7 @@ import { getUserByAddress, updateUser } from '@/lib/db';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { address: string } }
+  { params }: any
 ) {
   try {
     const address = params.address;
@@ -36,7 +36,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { address: string } }
+  { params }: any
 ) {
   try {
     const address = params.address;

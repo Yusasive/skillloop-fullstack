@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: any
 ) {
   try {
     const sessionId = params.id;

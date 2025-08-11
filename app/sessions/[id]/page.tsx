@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Session, User, Milestone } from "@/app/types";
 import { useWeb3 } from "@/context/Web3Context";
@@ -37,10 +37,11 @@ import {
 } from "lucide-react";
 
 interface SessionDetailPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function SessionDetailPage({ params }: SessionDetailPageProps) {
+export default function SessionDetailPage({ params: paramsProp }: SessionDetailPageProps) {
+  const params = use(paramsProp);
   const router = useRouter();
   const { account, user } = useWeb3();
   const { toast } = useToast();
